@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <title>เกมผจญภัยระบบร่างกายมนุษย์สำหรับนักเรียนชั้น ป.6 โดย Gifted NK, 2026</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/6c4b8d1f7a.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg1: #cfeeff;
+      --bg2: #fefefe;
+      --card: rgba(255,255,255,0.78);
+      --line: rgba(255,255,255,0.9);
+      --shadow: 0 18px 50px rgba(65, 108, 255, 0.18);
+      --shadow-strong: 0 22px 80px rgba(65, 108, 255, 0.28);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Mali', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,.95), transparent 20%),
+        radial-gradient(circle at 85% 10%, rgba(255,255,255,.75), transparent 18%),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.45), transparent 22%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x: hidden;
+      color: #184d7a;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,.3) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 70% 14%, rgba(255,255,255,.35) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,.28) 0 1px, transparent 1.2px);
+      background-size: 160px 160px;
+      opacity: .6;
+      mix-blend-mode: screen;
+    }
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 16px;
+      position: relative;
+    }
+    .screen.active { display: block; }
+    .glass {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .soft-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.72));
+      border: 2px solid rgba(255,255,255,.95);
+      box-shadow: 0 14px 35px rgba(31, 85, 160, .14);
+    }
+    .title-bubble {
+      text-shadow:
+        0 3px 0 rgba(255,255,255,.95),
+        0 7px 18px rgba(0,72,164,.25),
+        0 0 18px rgba(255,255,255,.55);
+      letter-spacing: .02em;
+    }
+    .btn-big {
+      min-height: 58px;
+      padding: 14px 20px;
+      border-radius: 22px;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(39, 92, 176, .2);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-big:active { transform: scale(.97); }
+    .btn-pulse {
+      animation: pulse 1.7s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); box-shadow: 0 10px 24px rgba(39, 92, 176, .2); }
+      50% { transform: scale(1.03); box-shadow: 0 16px 34px rgba(39, 92, 176, .32); }
+    }
+    .floaty { animation: float 3.8s ease-in-out infinite; }
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .bouncey { animation: bouncey 1.6s ease-in-out infinite; }
+    @keyframes bouncey {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .shine { position: relative; overflow: hidden; }
+    .shine::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -35%;
+      width: 35%;
+      height: 140%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.52), transparent);
+      transform: skewX(-20deg);
+      animation: sweep 3.8s infinite;
+    }
+    @keyframes sweep {
+      0% { left: -40%; }
+      60%,100% { left: 130%; }
+    }
+    .lab-form input {
+      background: rgba(255,255,255,.88);
+      border: 2px solid rgba(134, 196, 255, .7);
+      outline: none;
+      transition: .15s ease;
+    }
+    .lab-form input:focus {
+      border-color: #67b7ff;
+      box-shadow: 0 0 0 4px rgba(103,183,255,.18);
+    }
+    .level-card {
+      border-radius: 26px;
+      border: 2px solid rgba(255,255,255,.9);
+      box-shadow: 0 14px 26px rgba(0,0,0,.08);
+      overflow: hidden;
+      position: relative;
+    }
+    .level-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.14), transparent 40%);
+      pointer-events: none;
+    }
+    .organ-target {
+      user-select: none;
+      touch-action: none;
+    }
+    .organ-card {
+      user-select: none;
+      touch-action: none;
+      cursor: grab;
+      position: relative;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .organ-card.dragging {
+      opacity: .96;
+      cursor: grabbing;
+      transform: scale(1.08) rotate(2deg);
+      box-shadow: 0 18px 34px rgba(0,0,0,.14);
+      z-index: 50;
+    }
+    .slot-filled {
+      animation: pop .35s ease;
+    }
+    @keyframes pop { from { transform: scale(.82); } to { transform: scale(1); } }
+    .correct-flash { animation: correctFlash .28s ease 2; }
+    @keyframes correctFlash {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.03); filter: brightness(1.1); }
+    }
+    .wrong-shake { animation: shake .32s ease 1; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .star {
+      filter: drop-shadow(0 4px 9px rgba(255,190,0,.4));
+    }
+    .hidden-print { display: block; }
+    .certificate {
+      width: min(100%, 1100px);
+      aspect-ratio: 1.414 / 1;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.9), transparent 16%),
+        radial-gradient(circle at 80% 10%, rgba(255,215,130,.25), transparent 15%),
+        linear-gradient(135deg, #fff8e8 0%, #fffdf6 40%, #f6e3aa 100%);
+      border: 12px solid #d5b15b;
+      box-shadow: 0 26px 60px rgba(131, 94, 15, .18), inset 0 0 0 4px rgba(255,255,255,.6);
+      position: relative;
+      overflow: hidden;
+    }
+    .certificate::before {
+      content: '';
+      position: absolute;
+      inset: 18px;
+      border: 3px solid rgba(194, 153, 54, .6);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+    .gold-pill {
+      background: linear-gradient(180deg, #ffe98a, #e6b93c);
+      box-shadow: 0 10px 20px rgba(168, 121, 0, .2);
+    }
+    .print-ready-only { display: none; }
+    @media print {
+      @page { size: A4 landscape; margin: 0; }
+      body { background: white !important; }
+      body * { visibility: hidden !important; }
+      .print-ready-only, .print-ready-only * { visibility: visible !important; }
+      .print-ready-only { display: block !important; position: fixed; inset: 0; padding: 0 !important; margin: 0 !important; }
+      .certificate { width: 100vw; height: 100vh; max-width: none; border-width: 10px; box-shadow: none; }
+      .certificate::before { inset: 14px; }
+      .no-print { display: none !important; }
+    }
+    .safe-area-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 16px); }
+  </style>
+</head>
+<body>
+  <div id="app" class="max-w-3xl mx-auto">
+    <!-- START -->
+    <section id="startScreen" class="screen active">
+      <div class="min-h-screen flex flex-col justify-between safe-area-bottom">
+        <div class="pt-2 flex justify-between items-center">
+          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full glass text-sm font-bold">
+            <i class="fa-solid fa-flask text-sky-500"></i>
+            Science Adventure
+          </div>
+          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full glass text-sm font-bold">
+            <i class="fa-solid fa-bolt text-yellow-500"></i>
+            ป.6
+          </div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center text-center gap-5 py-8">
+          <div class="floaty text-7xl sm:text-8xl">🧒</div>
+          <div>
+            <h1 class="title-bubble text-4xl sm:text-5xl md:text-6xl font-extrabold text-sky-600 leading-tight">เกมผจญภัย<br>ระบบร่างกายมนุษย์</h1>
+            <p class="mt-3 text-base sm:text-lg font-semibold text-sky-700/90">เรียนรู้แบบสนุก เล่นได้บนมือถือทันที</p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 text-3xl sm:text-4xl">
+            <span class="bouncey">🧠</span>
+            <span class="bouncey" style="animation-delay:.2s">❤️</span>
+            <span class="bouncey" style="animation-delay:.4s">🫁</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3 pb-2">
+          <button id="startBtn" class="btn-big btn-pulse shine bg-gradient-to-r from-pink-500 via-fuchsia-500 to-indigo-500 text-white text-lg">เริ่มเล่นเลย!</button>
+          <button id="howToBtn" class="btn-big bg-white/80 text-sky-700 border-2 border-sky-200 text-lg">วิธีเล่น</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTRATION -->
+    <section id="registrationScreen" class="screen">
+      <div class="min-h-screen flex flex-col gap-4 safe-area-bottom">
+        <div class="flex items-center justify-between pt-1">
+          <button class="navBack text-sky-700 font-bold"><i class="fa-solid fa-chevron-left"></i> กลับ</button>
+          <div class="text-sm font-bold bg-white/80 px-3 py-2 rounded-full glass">ขั้นตอนที่ 1/4</div>
+        </div>
+
+        <div class="text-center pt-2">
+          <div class="text-4xl">🔬</div>
+          <h2 class="text-3xl font-extrabold text-sky-700 mt-2">ลงทะเบียนนักเรียน</h2>
+          <p class="text-sky-600 font-semibold mt-1">กรอกข้อมูลก่อนเริ่มภารกิจวิทยาศาสตร์</p>
+        </div>
+
+        <div class="glass rounded-[28px] p-4 sm:p-5 lab-form space-y-4">
+          <div class="flex items-center gap-3 p-3 rounded-2xl bg-sky-50 border border-sky-100">
+            <div class="text-3xl">🧪</div>
+            <div class="font-bold text-sky-700">แบบฟอร์มอุปกรณ์ห้องแล็บ</div>
+          </div>
+          <label class="block">
+            <span class="font-bold text-sky-700">ชื่อ-นามสกุล</span>
+            <input id="playerName" class="mt-2 w-full rounded-2xl px-4 py-4 text-lg font-semibold" placeholder="เช่น เด็กชายสมชาย ใจดี" />
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="block">
+              <span class="font-bold text-sky-700">ชั้นเรียน</span>
+              <input id="playerClass" class="mt-2 w-full rounded-2xl px-4 py-4 text-lg font-semibold" placeholder="ป.6/1" />
+            </label>
+            <label class="block">
+              <span class="font-bold text-sky-700">เลขที่</span>
+              <input id="playerNo" type="number" class="mt-2 w-full rounded-2xl px-4 py-4 text-lg font-semibold" placeholder="12" />
+            </label>
+          </div>
+          <button id="savePlayerBtn" class="btn-big w-full bg-gradient-to-r from-emerald-400 to-cyan-500 text-white text-lg">ยืนยันข้อมูล</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVELS -->
+    <section id="levelScreen" class="screen">
+      <div class="min-h-screen flex flex-col gap-4 safe-area-bottom">
+        <div class="flex items-center justify-between pt-1">
+          <button class="navBack text-sky-700 font-bold"><i class="fa-solid fa-chevron-left"></i> กลับ</button>
+          <div id="profileChip" class="text-sm font-bold bg-white/80 px-3 py-2 rounded-full glass"></div>
+        </div>
+
+        <div class="text-center pt-2">
+          <div class="text-4xl">🗺️</div>
+          <h2 class="text-3xl font-extrabold text-sky-700 mt-2">แผนผังด่านการเรียนรู้</h2>
+          <p class="text-sky-600 font-semibold mt-1">สะสมดาวครบทุกด่านเพื่อรับเกียรติบัตร</p>
+        </div>
+
+        <div id="levelsGrid" class="grid grid-cols-1 gap-3"></div>
+
+        <div id="certificateUnlockWrap" class="hidden mt-1">
+          <button id="openCertificateBtn" class="btn-big w-full bg-gradient-to-r from-yellow-300 to-amber-500 text-white text-xl border-2 border-yellow-100">🎓 รับเกียรติบัตรของคุณ!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAY -->
+    <section id="playScreen" class="screen">
+      <div class="min-h-screen flex flex-col gap-4 safe-area-bottom">
+        <div class="flex items-center justify-between pt-1">
+          <button id="backToLevelsFromPlay" class="text-sky-700 font-bold"><i class="fa-solid fa-chevron-left"></i> ด่าน</button>
+          <div class="flex items-center gap-2">
+            <div id="timerChip" class="text-sm font-bold bg-white/80 px-3 py-2 rounded-full glass">⏱️ 30</div>
+            <div id="scoreChip" class="text-sm font-bold bg-white/80 px-3 py-2 rounded-full glass">⭐ 0</div>
+          </div>
+        </div>
+
+        <div id="playHeader" class="text-center"></div>
+        <div id="playBody" class="flex-1"></div>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="resultScreen" class="screen">
+      <div class="min-h-screen flex items-center justify-center safe-area-bottom">
+        <div class="glass rounded-[32px] p-5 w-full">
+          <div class="text-center">
+            <div id="resultEmoji" class="text-6xl mb-3">🎉</div>
+            <h2 class="text-3xl font-extrabold text-sky-700">จบด่านแล้ว!</h2>
+            <p class="font-semibold text-sky-600 mt-1">นี่คือคะแนนของคุณในด่านนี้</p>
+          </div>
+          <div class="mt-5 grid grid-cols-2 gap-3 text-center">
+            <div class="soft-card rounded-3xl p-4">
+              <div class="text-sm font-bold text-sky-500">คะแนนรวม</div>
+              <div id="resultScore" class="text-3xl font-extrabold text-sky-700 mt-1">0</div>
+            </div>
+            <div class="soft-card rounded-3xl p-4">
+              <div class="text-sm font-bold text-sky-500">ดาวที่ได้</div>
+              <div id="resultStars" class="text-3xl mt-1">⭐</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-3 mt-5">
+            <button id="nextLevelBtn" class="btn-big bg-gradient-to-r from-emerald-400 to-cyan-500 text-white text-lg">เล่นด่านต่อไป</button>
+            <button id="backToLevelsBtn" class="btn-big bg-white text-sky-700 border-2 border-sky-200 text-lg">กลับหน้าเลือกด่าน</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATE -->
+    <section id="certificateScreen" class="screen print-ready-only">
+      <div class="min-h-screen flex items-center justify-center p-4 sm:p-6 no-print">
+        <div class="w-full">
+          <div class="flex items-center justify-between mb-3">
+            <button id="backFromCertBtn" class="text-sky-700 font-bold"><i class="fa-solid fa-chevron-left"></i> กลับ</button>
+            <div class="text-sm font-bold bg-white/80 px-3 py-2 rounded-full glass">Printable Certificate</div>
+          </div>
+          <div id="certificate" class="certificate rounded-[28px] mx-auto p-5 sm:p-8 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <div class="text-4xl sm:text-5xl">🏆</div>
+              <div class="text-right">
+                <div class="font-extrabold text-amber-800 text-lg sm:text-2xl">เกียรติบัตรอัจฉริยะ</div>
+                <div class="font-bold text-amber-700 text-xs sm:text-sm">Human Body Adventure Certificate</div>
+              </div>
+            </div>
+
+            <div class="text-center py-4 sm:py-6">
+              <div class="text-xs sm:text-sm font-bold tracking-[0.35em] text-amber-700">CERTIFICATE OF ACHIEVEMENT</div>
+              <h1 class="mt-3 text-3xl sm:text-5xl font-extrabold text-amber-900">มอบให้แก่</h1>
+              <div id="certName" class="mt-4 text-3xl sm:text-6xl font-extrabold text-sky-700 break-words">-</div>
+              <div class="mt-3 text-lg sm:text-2xl font-bold text-amber-800">
+                ชั้น <span id="certClass">-</span> เลขที่ <span id="certNo">-</span>
+              </div>
+              <div class="mt-5 text-base sm:text-xl font-semibold text-slate-700 max-w-3xl mx-auto leading-relaxed">
+                ผ่านภารกิจการเรียนรู้ระบบร่างกายมนุษย์ด้วยคะแนนรวมสูงสุด <span id="certBestScore" class="font-extrabold text-emerald-600">0</span> คะแนน
+                และสำเร็จการเรียนรู้ในวันที่ <span id="certDate" class="font-extrabold text-fuchsia-600">-</span>
+              </div>
+            </div>
+
+            <div class="flex items-end justify-between gap-4">
+              <div class="text-xs sm:text-sm text-amber-800 font-semibold leading-relaxed">
+                ครูผู้รับรอง<br>
+                <span class="font-bold">โรงเรียนของคุณ</span>
+              </div>
+              <div class="text-center flex-1">
+                <div class="inline-block px-5 py-2 rounded-full gold-pill text-amber-900 font-extrabold text-sm sm:text-lg">⭐ Excellent Scientist ⭐</div>
+              </div>
+              <div class="text-right text-xs sm:text-sm text-amber-800 font-semibold leading-relaxed">
+                วันที่ออกเอกสาร<br>
+                <span id="certIssueDate" class="font-bold">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-3 mt-4 no-print">
+            <button id="printCertBtn" class="btn-big bg-gradient-to-r from-amber-400 to-yellow-500 text-white text-lg">🖨️ พิมพ์ / Save PDF</button>
+            <button id="closeCertBtn" class="btn-big bg-white text-sky-700 border-2 border-sky-200 text-lg">กลับหน้าเลือกด่าน</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'human_body_adventure_p6_v1';
+    const LEVELS = [
+      { id: 'respiratory', name: 'ระบบหายใจ', color: 'from-sky-400 to-cyan-500', icon: '🫁', type: 'quiz', questions: [
+        { q: 'ปอดมีหน้าที่อะไร?', a: ['สร้างเลือด', 'แลกเปลี่ยนก๊าซ', 'ย่อยอาหาร', 'กรองของเสีย'], c: 1, explain: 'ปอดทำหน้าที่แลกเปลี่ยนก๊าซ ออกซิเจนและคาร์บอนไดออกไซด์' },
+        { q: 'เราหายใจเอาแก๊สอะไรเข้าสู่ร่างกาย?', a: ['ออกซิเจน', 'ไนโตรเจน', 'คาร์บอนไดออกไซด์', 'ฮีเลียม'], c: 0, explain: 'ร่างกายต้องใช้ออกซิเจนเพื่อหายใจระดับเซลล์' },
+        { q: 'อวัยวะใดช่วยดึงอากาศเข้าและออกจากปอด?', a: ['หัวใจ', 'กระเพาะอาหาร', 'กะบังลม', 'ไต'], c: 2, explain: 'กะบังลมทำงานร่วมกับทรวงอกเพื่อช่วยหายใจ' }
+      ]},
+      { id: 'digestive', name: 'ระบบย่อยอาหาร', color: 'from-emerald-400 to-lime-500', icon: '🍔', type: 'quiz', questions: [
+        { q: 'การย่อยอาหารเริ่มต้นที่อวัยวะใด?', a: ['ปาก', 'กระเพาะอาหาร', 'ลำไส้ใหญ่', 'ตับ'], c: 0, explain: 'การย่อยเริ่มที่ปากด้วยฟันและน้ำลาย' },
+        { q: 'อวัยวะใดดูดซึมสารอาหารมากที่สุด?', a: ['ลำไส้ใหญ่', 'ลำไส้เล็ก', 'กระเพาะอาหาร', 'ไต'], c: 1, explain: 'ลำไส้เล็กเป็นจุดดูดซึมสารอาหารหลัก' },
+        { q: 'อวัยวะใดช่วยบดเคี้ยวอาหาร?', a: ['ฟัน', 'หัวใจ', 'ปอด', 'สมอง'], c: 0, explain: 'ฟันช่วยบดเคี้ยวให้อาหารชิ้นเล็กลง' }
+      ]},
+      { id: 'circulatory', name: 'ระบบไหลเวียนเลือด', color: 'from-rose-400 to-red-500', icon: '❤️', type: 'quiz', questions: [
+        { q: 'หัวใจทำหน้าที่อะไร?', a: ['สูบฉีดเลือด', 'ย่อยอาหาร', 'หายใจ', 'สร้างกระดูก'], c: 0, explain: 'หัวใจสูบฉีดเลือดไปทั่วร่างกาย' },
+        { q: 'หัวใจของคนเรามีกี่ห้อง?', a: ['2 ห้อง', '3 ห้อง', '4 ห้อง', '5 ห้อง'], c: 2, explain: 'หัวใจของคนมี 4 ห้อง' },
+        { q: 'เลือดนำสิ่งใดไปเลี้ยงส่วนต่าง ๆ ของร่างกาย?', a: ['ออกซิเจน', 'ดิน', 'น้ำตาลอย่างเดียว', 'สี'], c: 0, explain: 'เลือดลำเลียงออกซิเจนและสารอาหาร' }
+      ]},
+      { id: 'nervous', name: 'ระบบประสาท', color: 'from-violet-400 to-fuchsia-500', icon: '🧠', type: 'quiz', questions: [
+        { q: 'ศูนย์กลางของระบบประสาทคืออะไร?', a: ['สมอง', 'หัวใจ', 'ปอด', 'ตับ'], c: 0, explain: 'สมองเป็นศูนย์กลางควบคุมการทำงานของร่างกาย' },
+        { q: 'อวัยวะใดส่งสัญญาณไปทั่วร่างกาย?', a: ['เส้นประสาท', 'กระเพาะอาหาร', 'ไต', 'กระดูก'], c: 0, explain: 'เส้นประสาทส่งข้อมูลระหว่างสมองกับส่วนต่าง ๆ' },
+        { q: 'การรับรู้ความร้อน-เย็นเกี่ยวข้องกับอะไร?', a: ['ประสาทสัมผัส', 'เลือด', 'กระดูก', 'น้ำลาย'], c: 0, explain: 'ประสาทสัมผัสช่วยรับข้อมูลจากสิ่งแวดล้อม' }
+      ]},
+      { id: 'muscle-bone', name: 'ระบบกล้ามเนื้อและกระดูก', color: 'from-orange-400 to-amber-500', icon: '🦴', type: 'quiz', questions: [
+        { q: 'ผู้ใหญ่มีกระดูกประมาณกี่ชิ้น?', a: ['106 ชิ้น', '206 ชิ้น', '306 ชิ้น', '406 ชิ้น'], c: 1, explain: 'ผู้ใหญ่มีโครงกระดูกประมาณ 206 ชิ้น' },
+        { q: 'กล้ามเนื้อมีหน้าที่อะไร?', a: ['ช่วยเคลื่อนไหว', 'ย่อยอาหาร', 'สูบฉีดเลือด', 'กรองปัสสาวะ'], c: 0, explain: 'กล้ามเนื้อช่วยให้ร่างกายเคลื่อนไหว' },
+        { q: 'ข้อต่อช่วยอะไร?', a: ['ให้กระดูกขยับได้', 'ทำให้มืด', 'ทำให้หิว', 'ทำให้เย็น'], c: 0, explain: 'ข้อต่อเป็นจุดเชื่อมที่ช่วยให้เคลื่อนไหวได้' }
+      ]},
+      { id: 'excretory', name: 'ระบบขับถ่าย', color: 'from-blue-400 to-indigo-500', icon: '🚽', type: 'quiz', questions: [
+        { q: 'อวัยวะใดกรองของเสียออกมาเป็นปัสสาวะ?', a: ['ไต', 'ตับ', 'หัวใจ', 'ปอด'], c: 0, explain: 'ไตทำหน้าที่กรองของเสียจากเลือด' },
+        { q: 'ปัสสาวะถูกเก็บไว้ที่อวัยวะใดก่อนขับออก?', a: ['กระเพาะปัสสาวะ', 'กระเพาะอาหาร', 'ลำไส้เล็ก', 'สมอง'], c: 0, explain: 'กระเพาะปัสสาวะเก็บปัสสาวะชั่วคราว' },
+        { q: 'ระบบขับถ่ายช่วยอะไร?', a: ['กำจัดของเสีย', 'สร้างกล้ามเนื้อ', 'ย่อยไขมัน', 'มองเห็น'], c: 0, explain: 'ระบบขับถ่ายช่วยกำจัดของเสียออกจากร่างกาย' }
+      ]},
+      { id: 'anatomy', name: 'มินิเกมลากวางอวัยวะ', color: 'from-teal-400 to-cyan-500', icon: '🧩', type: 'drag' }
+    ];
+
+    const state = loadState() || {
+      player: { name: '', className: '', no: '' },
+      levelStars: {},
+      levelBest: {},
+      completed: {},
+      currentLevel: null,
+      currentQuestionIndex: 0,
+      sessionScore: 0,
+      sessionStars: 0,
+      dragTimer: 30,
+      dragInterval: null,
+      dragPlaced: {},
+      dragScore: 0,
+      quizUsed: [],
+      quizQuestion: null
+    };
+
+    const els = {
+      screens: [...document.querySelectorAll('.screen')],
+      startBtn: document.getElementById('startBtn'),
+      howToBtn: document.getElementById('howToBtn'),
+      savePlayerBtn: document.getElementById('savePlayerBtn'),
+      playerName: document.getElementById('playerName'),
+      playerClass: document.getElementById('playerClass'),
+      playerNo: document.getElementById('playerNo'),
+      levelsGrid: document.getElementById('levelsGrid'),
+      profileChip: document.getElementById('profileChip'),
+      certificateUnlockWrap: document.getElementById('certificateUnlockWrap'),
+      openCertificateBtn: document.getElementById('openCertificateBtn'),
+      backToLevelsBtn: document.getElementById('backToLevelsBtn'),
+      backToLevelsFromPlay: document.getElementById('backToLevelsFromPlay'),
+      playHeader: document.getElementById('playHeader'),
+      playBody: document.getElementById('playBody'),
+      scoreChip: document.getElementById('scoreChip'),
+      timerChip: document.getElementById('timerChip'),
+      resultScore: document.getElementById('resultScore'),
+      resultStars: document.getElementById('resultStars'),
+      resultEmoji: document.getElementById('resultEmoji'),
+      nextLevelBtn: document.getElementById('nextLevelBtn'),
+      backToLevelsFromResult: document.getElementById('backToLevelsFromResult'),
+      certificateScreen: document.getElementById('certificateScreen'),
+      certName: document.getElementById('certName'),
+      certClass: document.getElementById('certClass'),
+      certNo: document.getElementById('certNo'),
+      certBestScore: document.getElementById('certBestScore'),
+      certDate: document.getElementById('certDate'),
+      certIssueDate: document.getElementById('certIssueDate'),
+      printCertBtn: document.getElementById('printCertBtn'),
+      closeCertBtn: document.getElementById('closeCertBtn'),
+      backFromCertBtn: document.getElementById('backFromCertBtn')
+    };
+
+    const audioCtx = (() => {
+      try { return new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; }
+    })();
+
+    function playTone(freq = 440, duration = 0.1, type = 'sine', vol = 0.08) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.value = vol;
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+      osc.stop(audioCtx.currentTime + duration + 0.02);
+    }
+    const sounds = {
+      click(){ playTone(520, .07, 'triangle', .04); },
+      correct(){ playTone(660, .11, 'sine', .08); setTimeout(()=>playTone(880, .14, 'sine', .08), 90); },
+      wrong(){ playTone(220, .14, 'sawtooth', .06); setTimeout(()=>playTone(160, .16, 'sawtooth', .06), 120); },
+      success(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>playTone(f,.12,'triangle',.08), i*90)); }
+    };
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; }
+    }
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+    function showScreen(id) {
+      els.screens.forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function formatThaiDate(date = new Date()) {
+      return new Intl.DateTimeFormat('th-TH-u-ca-buddhist', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      }).format(date);
+    }
+
+    function currentProfileText() {
+      const p = state.player || {};
+      return [p.name, p.className ? `ชั้น ${p.className}` : '', p.no ? `เลขที่ ${p.no}` : ''].filter(Boolean).join(' • ') || 'ยังไม่ได้ลงทะเบียน';
+    }
+
+    function allLevelsUnlockedForCert() {
+      return LEVELS.every(l => (state.levelStars[l.id] || 0) >= 1);
+    }
+
+    function bestScoreTotal() {
+      return Object.values(state.levelBest || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+    }
+
+    function starsForScore(score, max = 100) {
+      const ratio = score / max;
+      if (ratio >= .85) return 3;
+      if (ratio >= .6) return 2;
+      if (ratio >= .35) return 1;
+      return 0;
+    }
+
+    function buildLevels() {
+      els.levelsGrid.innerHTML = '';
+      LEVELS.forEach((lvl, idx) => {
+        const stars = state.levelStars[lvl.id] || 0;
+        const best = state.levelBest[lvl.id] || 0;
+        const btn = document.createElement('button');
+        btn.className = `level-card text-left p-4 bg-gradient-to-r ${lvl.color} text-white`;
+        btn.innerHTML = `
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl">${lvl.icon}</div>
+              <div>
+                <div class="font-extrabold text-lg">ด่าน ${idx + 1}: ${lvl.name}</div>
+                <div class="text-sm font-semibold text-white/90">คะแนนสูงสุด: ${best} | ดาว: ${stars} / 3</div>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold">${'⭐'.repeat(stars)}${'✩'.repeat(3-stars)}</div>
+          </div>
+          <div class="mt-3 text-sm font-bold bg-white/20 rounded-2xl px-3 py-2 inline-flex items-center gap-2">
+            <i class="fa-solid fa-play"></i> เริ่มด่านนี้
+          </div>
+        `;
+        btn.onclick = () => {
+          sounds.click();
+          startLevel(lvl.id);
+        };
+        els.levelsGrid.appendChild(btn);
+      });
+      els.profileChip.textContent = currentProfileText();
+      els.certificateUnlockWrap.classList.toggle('hidden', !allLevelsUnlockedForCert());
+      saveState();
+    }
+
+    function startLevel(levelId) {
+      state.currentLevel = levelId;
+      state.sessionScore = 0;
+      state.sessionStars = 0;
+      state.currentQuestionIndex = 0;
+      state.quizUsed = [];
+      state.quizQuestion = null;
+      if (levelId === 'anatomy') renderDragGame();
+      else renderQuizGame();
+      showScreen('playScreen');
+    }
+
+    function renderHeader(title, subtitle, icon, colorClass) {
+      els.playHeader.innerHTML = `
+        <div class="glass rounded-[28px] p-4 ${colorClass}">
+          <div class="text-4xl">${icon}</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-sky-800 mt-2">${title}</h2>
+          <p class="font-semibold text-sky-600 mt-1">${subtitle}</p>
+        </div>
+      `;
+    }
+
+    function renderQuizGame() {
+      stopTimer();
+      const level = LEVELS.find(l => l.id === state.currentLevel);
+      const q = pickQuestion(level);
+      state.quizQuestion = q;
+      renderHeader(level.name, 'เลือกคำตอบที่ถูกต้อง', level.icon, '');
+      els.playBody.innerHTML = `
+        <div class="glass rounded-[30px] p-4 sm:p-5 h-full flex flex-col gap-4">
+          <div class="flex items-center justify-between gap-2">
+            <button id="speakBtn" class="btn-big bg-white text-sky-700 border-2 border-sky-200 px-4 py-3 min-h-0 text-base"><i class="fa-solid fa-volume-high"></i> ฟังคำถาม</button>
+            <div class="text-sm font-bold bg-sky-50 text-sky-700 px-3 py-2 rounded-full">${state.currentQuestionIndex + 1} / 1</div>
+          </div>
+          <div class="soft-card rounded-[28px] p-4 sm:p-5">
+            <div class="text-lg sm:text-xl font-extrabold text-slate-800 leading-relaxed">${q.q}</div>
+          </div>
+          <div id="quizOptions" class="grid grid-cols-1 gap-3"></div>
+          <div class="mt-auto text-center text-sm font-bold text-sky-600">แตะคำตอบเพื่อรับคะแนนและดาว</div>
+        </div>
+      `;
+      document.getElementById('speakBtn').onclick = () => speakThai(q.q);
+      const options = document.getElementById('quizOptions');
+      q.a.forEach((opt, idx) => {
+        const b = document.createElement('button');
+        b.className = 'btn-big bg-white text-slate-700 border-2 border-sky-100 text-left';
+        b.innerHTML = `<span class="font-extrabold text-sky-700 mr-2">${String.fromCharCode(65 + idx)}.</span> ${opt}`;
+        b.onclick = () => answerQuiz(idx, b);
+        options.appendChild(b);
+      });
+      updateTimerChip('');
+    }
+
+    function pickQuestion(level) {
+      const list = level.questions;
+      const idx = Math.floor(Math.random() * list.length);
+      return list[idx];
+    }
+
+    function answerQuiz(choice, btn) {
+      const q = state.quizQuestion;
+      const buttons = [...document.querySelectorAll('#quizOptions button')];
+      buttons.forEach(b => b.disabled = true);
+      const correct = choice === q.c;
+      if (correct) {
+        sounds.correct();
+        btn.classList.add('correct-flash', 'bg-emerald-100', 'border-emerald-400');
+        state.sessionScore = 100;
+      } else {
+        sounds.wrong();
+        btn.classList.add('wrong-shake', 'bg-red-100', 'border-red-400');
+        buttons[q.c].classList.add('bg-emerald-100', 'border-emerald-400');
+        state.sessionScore = 60;
+      }
+      const stars = starsForScore(state.sessionScore, 100);
+      state.sessionStars = stars;
+      completeLevel(state.currentLevel, state.sessionScore, stars);
+      setTimeout(() => showResult(q.explain, correct), 700);
+    }
+
+    function showResult(detail, correct) {
+      els.resultEmoji.textContent = correct ? '🌟' : '🙂';
+      els.resultScore.textContent = state.sessionScore;
+      els.resultStars.textContent = '⭐'.repeat(state.sessionStars) || '✩';
+      showScreen('resultScreen');
+      Swal.fire({
+        title: correct ? 'ตอบถูกเยี่ยมมาก!' : 'เกือบถูกแล้ว!'
+        , text: detail,
+        icon: correct ? 'success' : 'info',
+        confirmButtonText: 'เข้าใจแล้ว'
+      });
+    }
+
+    function completeLevel(levelId, score, stars) {
+      state.completed[levelId] = true;
+      state.levelBest[levelId] = Math.max(Number(state.levelBest[levelId] || 0), Number(score || 0));
+      state.levelStars[levelId] = Math.max(Number(state.levelStars[levelId] || 0), Number(stars || 0));
+      saveState();
+      buildLevels();
+    }
+
+    function renderDragGame() {
+      renderHeader('มินิเกมลากวางอวัยวะ', 'ลากอวัยวะไปใส่ตำแหน่งให้ถูกต้องภายใน 30 วินาที', '🧩', '');
+      state.dragTimer = 30;
+      state.dragPlaced = {};
+      state.dragScore = 0;
+      const organData = [
+        { key: 'brain', emoji: '🧠', label: 'สมอง', x: 50, y: 16 },
+        { key: 'lungs', emoji: '🫁', label: 'ปอด', x: 50, y: 30 },
+        { key: 'heart', emoji: '❤️', label: 'หัวใจ', x: 50, y: 44 },
+        { key: 'stomach', emoji: '🍔', label: 'กระเพาะอาหาร', x: 50, y: 58 }
+      ];
+      els.playBody.innerHTML = `
+        <div class="glass rounded-[30px] p-4 sm:p-5 h-full flex flex-col gap-4">
+          <div class="grid grid-cols-1 gap-4">
+            <div class="soft-card rounded-[28px] p-3 relative overflow-hidden">
+              <div class="absolute inset-0 pointer-events-none opacity-40" style="background: radial-gradient(circle at 50% 50%, rgba(130,216,255,.5), transparent 60%);"></div>
+              <div class="relative h-[430px] sm:h-[520px] rounded-[24px] bg-gradient-to-b from-sky-50 to-white border-2 border-sky-100 overflow-hidden">
+                <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, #8ccfff 1px, transparent 1px); background-size: 28px 28px;"></div>
+                <div class="absolute left-1/2 top-3 -translate-x-1/2 text-xs font-bold text-sky-600 bg-white/80 px-3 py-1 rounded-full">โครงร่างมนุษย์</div>
+                <div class="absolute left-1/2 top-[8%] -translate-x-1/2 text-6xl">🧒</div>
+                <div class="absolute left-1/2 top-[21%] -translate-x-1/2 text-5xl">⬜</div>
+                <div class="absolute left-1/2 top-[34%] -translate-x-1/2 text-5xl">⬜</div>
+                <div class="absolute left-1/2 top-[48%] -translate-x-1/2 text-5xl">⬜</div>
+                <div class="absolute left-1/2 top-[60%] -translate-x-1/2 text-5xl">⬜</div>
+
+                ${organData.map(o => `<div class="organ-target absolute w-28 sm:w-36 -translate-x-1/2 -translate-y-1/2 left-[${o.x}%] top-[${o.y}%]" data-slot="${o.key}">
+                    <div class="rounded-2xl border-2 border-dashed border-sky-300 bg-white/70 px-3 py-2 text-center shadow-sm ${o.key}">
+                      <div class="text-3xl">${o.emoji}</div>
+                      <div class="text-xs font-bold text-sky-700">${o.label}</div>
+                    </div>
+                  </div>`).join('')}
+              </div>
+            </div>
+
+            <div class="soft-card rounded-[28px] p-4">
+              <div class="flex items-center justify-between gap-3 mb-3">
+                <div class="font-extrabold text-sky-700 text-lg">ถาดอวัยวะ</div>
+                <div class="text-sm font-bold text-sky-500">ลากไปยังตำแหน่งที่ถูกต้อง</div>
+              </div>
+              <div id="organTray" class="grid grid-cols-2 gap-3"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      const tray = document.getElementById('organTray');
+      organData.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'organ-card soft-card rounded-3xl p-3 text-center text-slate-700';
+        card.dataset.organ = o.key;
+        card.innerHTML = `<div class="text-4xl">${o.emoji}</div><div class="font-extrabold mt-1">${o.label}</div>`;
+        tray.appendChild(card);
+        makeDraggable(card, o.key);
+      });
+      startTimer(30, () => finishDragGame(false));
+      updateScoreTimerUI();
+    }
+
+    function updateScoreTimerUI() {
+      els.scoreChip.textContent = `⭐ ${state.dragScore}`;
+      els.timerChip.textContent = `⏱️ ${state.dragTimer}`;
+    }
+
+    function startTimer(seconds, onEnd) {
+      stopTimer();
+      state.dragTimer = seconds;
+      updateScoreTimerUI();
+      state.dragInterval = setInterval(() => {
+        state.dragTimer -= 1;
+        updateScoreTimerUI();
+        if (state.dragTimer <= 0) {
+          stopTimer();
+          onEnd?.();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (state.dragInterval) clearInterval(state.dragInterval);
+      state.dragInterval = null;
+    }
+
+    function makeDraggable(el, key) {
+      let dragging = false;
+      let offsetX = 0, offsetY = 0;
+      let clone = null;
+      let touchId = null;
+      let startRect = null;
+
+      const move = (clientX, clientY) => {
+        if (!dragging || !clone) return;
+        clone.style.left = `${clientX - offsetX}px`;
+        clone.style.top = `${clientY - offsetY}px`;
+      };
+
+      const end = (clientX, clientY) => {
+        if (!dragging || !clone) return;
+        const elements = document.elementsFromPoint(clientX, clientY);
+        const slot = elements.find(n => n?.dataset?.slot === key);
+        const targetCard = document.querySelector(`.organ-target[data-slot="${key}"] .${CSS.escape(key)}`);
+        if (slot) {
+          const slotBox = slot.querySelector('div');
+          slotBox.classList.add('slot-filled');
+          slotBox.innerHTML = `<div class="text-3xl">${el.querySelector('.text-4xl').textContent}</div><div class="text-xs font-bold text-emerald-700">ถูกต้อง!</div>`;
+          state.dragPlaced[key] = true;
+          state.dragScore += 25;
+          sounds.correct();
+          state.currentLevel = 'anatomy';
+          const matchedCount = Object.keys(state.dragPlaced).length;
+          if (matchedCount === 4) {
+            setTimeout(() => finishDragGame(true), 550);
+          }
+        } else {
+          sounds.wrong();
+          if (targetCard) targetCard.classList.add('wrong-shake');
+          setTimeout(() => targetCard?.classList.remove('wrong-shake'), 350);
+        }
+        document.body.removeChild(clone);
+        clone = null;
+        dragging = false;
+        el.style.visibility = 'visible';
+        updateScoreTimerUI();
+      };
+
+      el.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        if (state.dragPlaced[key]) return;
+        dragging = true;
+        sounds.click();
+        const rect = el.getBoundingClientRect();
+        startRect = rect;
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        clone = el.cloneNode(true);
+        clone.classList.add('dragging');
+        clone.style.position = 'fixed';
+        clone.style.left = rect.left + 'px';
+        clone.style.top = rect.top + 'px';
+        clone.style.width = rect.width + 'px';
+        clone.style.height = rect.height + 'px';
+        clone.style.zIndex = '9999';
+        clone.style.pointerEvents = 'none';
+        document.body.appendChild(clone);
+        el.style.visibility = 'hidden';
+
+        const onMove = ev => move(ev.clientX, ev.clientY);
+        const onUp = ev => {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          end(ev.clientX, ev.clientY);
+        };
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      el.addEventListener('touchstart', (e) => {
+        if (state.dragPlaced[key]) return;
+        sounds.click();
+        const t = e.changedTouches[0];
+        touchId = t.identifier;
+        dragging = true;
+        const rect = el.getBoundingClientRect();
+        startRect = rect;
+        offsetX = t.clientX - rect.left;
+        offsetY = t.clientY - rect.top;
+        clone = el.cloneNode(true);
+        clone.classList.add('dragging');
+        clone.style.position = 'fixed';
+        clone.style.left = rect.left + 'px';
+        clone.style.top = rect.top + 'px';
+        clone.style.width = rect.width + 'px';
+        clone.style.height = rect.height + 'px';
+        clone.style.zIndex = '9999';
+        clone.style.pointerEvents = 'none';
+        document.body.appendChild(clone);
+        el.style.visibility = 'hidden';
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!dragging || touchId === null) return;
+        const t = [...e.changedTouches].find(tt => tt.identifier === touchId);
+        if (!t) return;
+        move(t.clientX, t.clientY);
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        if (!dragging || touchId === null) return;
+        const t = [...e.changedTouches].find(tt => tt.identifier === touchId) || e.changedTouches[0];
+        if (t) end(t.clientX, t.clientY);
+        touchId = null;
+      }, { passive: true });
+    }
+
+    function finishDragGame(success) {
+      stopTimer();
+      const score = success ? 100 : Math.max(40, state.dragScore);
+      const stars = starsForScore(score, 100);
+      state.sessionScore = score;
+      state.sessionStars = stars;
+      completeLevel('anatomy', score, stars);
+      els.resultEmoji.textContent = success ? '🏅' : '⏳';
+      els.resultScore.textContent = score;
+      els.resultStars.textContent = '⭐'.repeat(stars) || '✩';
+      showScreen('resultScreen');
+      if (success) sounds.success();
+      Swal.fire({
+        title: success ? 'สำเร็จแล้ว!' : 'หมดเวลาแล้ว',
+        text: success ? 'คุณจับคู่อวัยวะครบทุกส่วน' : 'ลองใหม่อีกครั้งเพื่อให้ครบทุกอวัยวะ',
+        icon: success ? 'success' : 'warning',
+        confirmButtonText: 'ต่อไป'
+      });
+    }
+
+    function speakThai(text) {
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'th-TH';
+        u.rate = 0.92;
+        u.pitch = 1.08;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      } catch (e) {
+        Swal.fire('ไม่สามารถใช้เสียงพูดได้', 'เบราว์เซอร์นี้อาจไม่รองรับ Web Speech API', 'info');
+      }
+    }
+
+    function updateCertificate() {
+      const p = state.player || {};
+      els.certName.textContent = p.name || '-';
+      els.certClass.textContent = p.className || '-';
+      els.certNo.textContent = p.no || '-';
+      els.certBestScore.textContent = bestScoreTotal();
+      const d = formatThaiDate(new Date());
+      els.certDate.textContent = d;
+      els.certIssueDate.textContent = d;
+    }
+
+    function gotoCertificate() {
+      if (!allLevelsUnlockedForCert()) {
+        Swal.fire('ยังไม่ครบทุกด่าน', 'ต้องได้อย่างน้อย 1 ดาวในทุกด่านก่อน', 'info');
+        return;
+      }
+      updateCertificate();
+      showScreen('certificateScreen');
+    }
+
+    function goToLevels() {
+      buildLevels();
+      showScreen('levelScreen');
+    }
+
+    document.querySelectorAll('.navBack').forEach(btn => btn.addEventListener('click', () => {
+      sounds.click();
+      goToLevels();
+    }));
+
+    els.startBtn.addEventListener('click', () => {
+      sounds.click();
+      if (!audioCtx) return;
+      showScreen('registrationScreen');
+    });
+
+    els.howToBtn.addEventListener('click', () => {
+      sounds.click();
+      Swal.fire({
+        title: 'วิธีเล่น',
+        html: '<div style="text-align:left">1) ลงทะเบียนก่อน<br>2) เลือกด่านที่ต้องการ<br>3) ลากวางหรือเลือกคำตอบให้ถูกต้อง<br>4) สะสมดาวเพื่อปลดล็อกเกียรติบัตร</div>',
+        icon: 'info',
+        confirmButtonText: 'เริ่มเลย'
+      });
+    });
+
+    els.savePlayerBtn.addEventListener('click', () => {
+      const name = els.playerName.value.trim();
+      const className = els.playerClass.value.trim();
+      const no = els.playerNo.value.trim();
+      if (!name || !className || !no) {
+        Swal.fire('กรอกข้อมูลไม่ครบ', 'โปรดกรอกชื่อ-นามสกุล ชั้นเรียน และเลขที่', 'warning');
+        return;
+      }
+      state.player = { name, className, no };
+      saveState();
+      buildLevels();
+      Swal.fire({ title: 'บันทึกข้อมูลแล้ว!', icon: 'success', confirmButtonText: 'ไปหน้าด่าน' }).then(goToLevels);
+      sounds.success();
+    });
+
+    els.backToLevelsBtn.addEventListener('click', () => { sounds.click(); goToLevels(); });
+    els.backToLevelsFromPlay.addEventListener('click', () => { sounds.click(); stopTimer(); goToLevels(); });
+    els.nextLevelBtn.addEventListener('click', () => {
+      sounds.click();
+      const ids = LEVELS.map(l => l.id);
+      const currentIndex = ids.indexOf(state.currentLevel);
+      const nextId = ids[currentIndex + 1];
+      if (nextId) {
+        startLevel(nextId);
+      } else {
+        goToLevels();
+      }
+    });
+    els.openCertificateBtn.addEventListener('click', () => { sounds.click(); gotoCertificate(); });
+    els.backFromCertBtn.addEventListener('click', () => { sounds.click(); goToLevels(); });
+    els.closeCertBtn.addEventListener('click', () => { sounds.click(); goToLevels(); });
+    els.printCertBtn.addEventListener('click', () => { sounds.click(); updateCertificate(); window.print(); });
+
+    document.getElementById('resultScreen').addEventListener('click', (e) => {
+      if (e.target.id === 'backToLevelsBtn') { goToLevels(); }
+    });
+
+    // Persist profile form values for convenience
+    if (state.player) {
+      els.playerName.value = state.player.name || '';
+      els.playerClass.value = state.player.className || '';
+      els.playerNo.value = state.player.no || '';
+    }
+
+    buildLevels();
+    updateCertificate();
+
+    // Unlock start experience and keep audio context polite on mobile browsers
+    document.body.addEventListener('pointerdown', () => {
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+    }, { once: false });
+
+    // Small accessibility helpers
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') goToLevels();
+    });
+  </script>
+</body>
+</html>
